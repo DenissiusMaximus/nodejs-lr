@@ -27,7 +27,7 @@ function fetchUserProfiles(userIds: string[]): Promise<UserProfile[]> {
     return Promise.all(userIds.map(getUserById));
 }
 
-async function runExample() {
+export async function t4() {
     const userIds: string[] = ["1", "2", "3"];
     
     console.time("FetchTime"); 
@@ -37,4 +37,4 @@ async function runExample() {
     console.log(profiles);
 }
 
-runExample();
+t4();

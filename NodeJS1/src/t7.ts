@@ -13,7 +13,7 @@ function raceWithTimeout(
     return Promise.race([promise, timeoutPromise]);
 }
 
-async function testRace() {
+export async function t7() {
     const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms + 15));
 
     console.log("Тест 1: Швидка операція");
@@ -33,4 +33,4 @@ async function testRace() {
     }
 }
 
-testRace();
+t7();

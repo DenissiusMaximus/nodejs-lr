@@ -24,11 +24,11 @@ async function retryOperation(
     throw lastError;
 }
 
-async function testRetry() {
+export async function t5() {
     let attempts = 0;
     
-    const unreliableOperation = async (): Promise<string> => {
-        attempts = 1;
+    const operation = async (): Promise<string> => {
+        attempts++;
         if (attempts < 3) {
             throw new Error('Error');
         }
@@ -36,11 +36,11 @@ async function testRetry() {
     };
 
     try {
-        const result = await retryOperation(unreliableOperation, 3);
+        const result = await retryOperation(operation, 3);
         console.log(result); 
     } catch (error) {
         console.error("Error:", error);
     }
 }
 
-testRetry();
+t5();
