@@ -1,11 +1,15 @@
-import { t3 } from "./t3";
-import { t4 } from "./t4";
-import { t5 } from "./t5";
-import { t6 } from "./t6";
-import { t7 } from "./t7";
+import { t3 as delay } from "./t3";
+import { t4 as fetchUserProfiles } from "./t4";
+import { t5 as retryOperation } from "./t5";
+import { t6 as processInBatches } from "./t6";
+import { t7 as raceWithTimeout } from "./t7";
 
-t3();
-t4();
-t5();
-t6();
-t7();
+async function main() {
+    await delay();
+    await fetchUserProfiles();
+    await retryOperation();
+    await processInBatches();
+    await raceWithTimeout();
+}
+
+main();

@@ -19,20 +19,10 @@ function getUserById(userId: string): Promise<UserProfile> {
     });
 }
 
-function fetchUserProfiles(userIds: string[]): Promise<UserProfile[]> {
+export function fetchUserProfiles(userIds: string[]): Promise<UserProfile[]> {
     if (userIds.length === 0) {
         return Promise.resolve([]);
     }
 
     return Promise.all(userIds.map(getUserById));
-}
-
-export async function t4() {
-    const userIds: string[] = ["1", "2", "3"];
-    
-    console.time("FetchTime"); 
-    const profiles = await fetchUserProfiles(userIds);
-    console.timeEnd("FetchTime");
-
-    console.log(profiles);
 }

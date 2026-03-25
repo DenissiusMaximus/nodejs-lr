@@ -1,7 +1,7 @@
-async function retryOperation(
-    operation: () => Promise<unknown>,
+export async function retryOperation<T>(
+    operation: () => Promise<T>,
     maxRetries: number = 3 
-): Promise<unknown> {
+): Promise<T> {
     let lastError: unknown;
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -22,23 +22,4 @@ async function retryOperation(
     }
 
     throw lastError;
-}
-
-export async function t5() {
-    let attempts = 0;
-    
-    const operation = async (): Promise<string> => {
-        attempts++;
-        if (attempts < 3) {
-            throw new Error('Error');
-        }
-        return 'Успіх!';
-    };
-
-    try {
-        const result = await retryOperation(operation, 3);
-        console.log(result); 
-    } catch (error) {
-        console.error("Error:", error);
-    }
 }

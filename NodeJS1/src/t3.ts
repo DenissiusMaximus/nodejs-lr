@@ -6,5 +6,3 @@ export async function t3() {
     await delay(1000); 
     console.log("Ready");
 }
-
-t3();
