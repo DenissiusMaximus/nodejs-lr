@@ -4,7 +4,7 @@ export interface UserProfile {
     email: string;
 }
 
-function getUserById(userId: string): Promise<UserProfile> {
+export function getUserById(userId: string): Promise<UserProfile> {
     return new Promise((resolve) => {
         const delayMs = 50 + Math.random() * 100;
 
