@@ -1,11 +1,11 @@
-import { Document, Schema, model } from 'mongoose';
+import { Document, Schema, Types, model } from 'mongoose';
 
 export interface ICategory {
     name: string;
     description?: string;
     type: 'income' | 'expense';
     color: string;
-    userId: number;
+    ownerId: Types.ObjectId;
 }
 
 export interface ICategoryDocument extends ICategory, Document {
@@ -42,16 +42,10 @@ const categorySchema = new Schema<ICategoryDocument>(
             required: [true, 'Колір є обов\'язковим'],
             match: [/^#[0-9A-Fa-f]{6}$/, 'Невірний формат кольору, очікується HEX (наприклад, #FF0000)']
         },
-        userId: {
-            type: Number,
-            required: [true, 'ID користувача є обов\'язковим'],
-            min: [1, 'ID користувача має бути додатним числом'],
-            validate: {
-                validator: function (value: number) {
-                    return Number.isInteger(value);
-                },
-                message: 'ID користувача ({VALUE}) має бути цілим числом'
-            }
+        ownerId: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            required: [true, 'ID власника є обов\'язковим']
         }
     },
     {

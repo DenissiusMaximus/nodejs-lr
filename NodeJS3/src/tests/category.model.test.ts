@@ -1,3 +1,4 @@
+import { afterAll, afterEach, beforeAll, describe, expect, it } from '@jest/globals';
 import mongoose from 'mongoose';
 import { CategoryModel } from '../models/category.model';
 import { connectTestDB, closeTestDB, clearTestDB } from './setup';
@@ -11,7 +12,7 @@ describe('Category Model Unit Tests', () => {
         name: 'Транспорт',
         type: 'expense',
         color: '#0000FF',
-        userId: 1
+        ownerId: new mongoose.Types.ObjectId()
     };
 
     it('повинен успішно створити категорію та згенерувати автоматичні дати', async () => {
@@ -25,34 +26,24 @@ describe('Category Model Unit Tests', () => {
     });
 
     it('повинен повернути ValidationError, якщо відсутні обов\'язкові поля', async () => {
-        const category = new CategoryModel({ type: 'expense' }); // Відсутні name, color, userId
-        
+        const category = new CategoryModel({ type: 'expense' });
+
         let err: any;
         try { await category.save(); } catch (error) { err = error; }
-        
+
         expect(err).toBeInstanceOf(mongoose.Error.ValidationError);
         expect(err.errors.name).toBeDefined();
         expect(err.errors.color).toBeDefined();
-        expect(err.errors.userId).toBeDefined();
+        expect(err.errors.ownerId).toBeDefined();
     });
 
     it('повинен повернути помилку валідації через regex для поля color', async () => {
-        const category = new CategoryModel({ ...validData, color: 'blue' }); // Не HEX формат
-        
-        let err: any;
-        try { await category.save(); } catch (error) { err = error; }
-        
-        expect(err.errors.color).toBeDefined();
-    });
+        const category = new CategoryModel({ ...validData, color: 'blue' });
 
-    it('повинен повернути помилку кастомного валідатора, якщо userId не ціле число', async () => {
-        const category = new CategoryModel({ ...validData, userId: 1.5 });
-        
         let err: any;
         try { await category.save(); } catch (error) { err = error; }
-        
-        expect(err.errors.userId).toBeDefined();
-        expect(err.errors.userId.message).toContain('має бути цілим числом');
+
+        expect(err.errors.color).toBeDefined();
     });
 
     it('повинен коректно обчислювати віртуальну властивість displayInfo', () => {

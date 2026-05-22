@@ -1,0 +1,51 @@
+@baseUrl = http://localhost:3000
+@json = application/json
+
+### 1) Create without auth - should return 401
+POST {{baseUrl}}/categories
+Content-Type: {{json}}
+
+{
+  "name": "No auth category",
+  "description": "This request should fail",
+  "type": "expense",
+  "color": "#FF0000"
+}
+
+### 2) Register user
+POST {{baseUrl}}/auth/register
+Content-Type: {{json}}
+
+{
+  "email": "lab7@example.com",
+  "password": "password123"
+}
+
+### 3) Login user - cookies are stored by REST Client for the same host
+POST {{baseUrl}}/auth/login
+Content-Type: {{json}}
+
+{
+  "email": "lab7@example.com",
+  "password": "password123"
+}
+
+### 4) Create with auth cookie - should work
+POST {{baseUrl}}/categories
+Content-Type: {{json}}
+
+{
+  "name": "Food",
+  "description": "Created after login",
+  "type": "expense",
+  "color": "#00AAFF"
+}
+
+### 5) Read categories - should return the created item
+GET {{baseUrl}}/categories
+
+### 6) Refresh tokens - should issue new cookies
+POST {{baseUrl}}/auth/refresh
+
+### 7) Logout - should clear auth cookies
+POST {{baseUrl}}/auth/logout

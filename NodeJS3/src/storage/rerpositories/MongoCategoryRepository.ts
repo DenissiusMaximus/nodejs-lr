@@ -1,16 +1,16 @@
 import { ICategoryRepository, PaginatedResult, PaginationOptions } from './ICategoryRepository';
-import { CategoryEntity, CreateCategoryInput, UpdateCategoryInput } from '../../schemas/category.schema';
+import { CategoryEntity, CreateCategoryWithOwnerInput, UpdateCategoryInput } from '../../schemas/category.schema';
 import { CategoryModel } from '../../models/category.model';
 
 export class MongoCategoryRepository implements ICategoryRepository {
     
     async findMany(
-        filters?: { userId?: number; type?: string },
+        filters?: { ownerId?: string; type?: string },
         options?: PaginationOptions
     ): Promise<PaginatedResult<CategoryEntity>> {
         
         const query: any = {};
-        if (filters?.userId !== undefined) query.userId = filters.userId;
+        if (filters?.ownerId !== undefined) query.ownerId = filters.ownerId;
         if (filters?.type !== undefined) query.type = filters.type;
 
         const page = options?.page && options.page > 0 ? options.page : 1;
@@ -48,7 +48,7 @@ export class MongoCategoryRepository implements ICategoryRepository {
         return category as unknown as CategoryEntity | null;
     }
 
-    async create(data: CreateCategoryInput): Promise<CategoryEntity> {
+    async create(data: CreateCategoryWithOwnerInput): Promise<CategoryEntity> {
         const newCategory = await CategoryModel.create(data);
         return newCategory as unknown as CategoryEntity;
     }
@@ -57,7 +57,7 @@ export class MongoCategoryRepository implements ICategoryRepository {
         const updatedCategory = await CategoryModel.findByIdAndUpdate(
             id,
             data,
-            { new: true, runValidators: true }
+            { runValidators: true, returnDocument: 'after' }
         );
         return updatedCategory as unknown as CategoryEntity | null;
     }

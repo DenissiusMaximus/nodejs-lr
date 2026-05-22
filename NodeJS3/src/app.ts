@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors'; 
 import mongoose from 'mongoose';
+import { createAuthRouter } from './routes/auth.routes';
 import { createCategoryRouter } from './routes/category.routes';
 import { errorHandler } from './middleware/errorHandler';
 import { MongoCategoryRepository } from './storage/rerpositories/MongoCategoryRepository';
@@ -17,13 +18,15 @@ app.get('/health', (req: Request, res: Response) => {
 	}
 });
 
-app.use(cors());
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
 export const repository = new MongoCategoryRepository();
 export const service = new CategoryService(repository);    
+export const authRouter = createAuthRouter();
 export const categoryRouter = createCategoryRouter(service);
 
+app.use('/auth', authRouter);
 app.use('/categories', categoryRouter);
 
 app.use(errorHandler);

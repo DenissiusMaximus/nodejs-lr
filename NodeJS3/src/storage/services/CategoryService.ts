@@ -4,8 +4,8 @@ import { CategoryEntity, CreateCategoryInput, UpdateCategoryInput } from '../../
 export class CategoryService {
     constructor(private repository: ICategoryRepository) {}
 
-    async create(data: CreateCategoryInput): Promise<CategoryEntity> {
-        return this.repository.create(data);
+    async create(data: CreateCategoryInput, ownerId: string): Promise<CategoryEntity> {
+        return this.repository.create({ ...data, ownerId });
     }
 
     async update(id: string, data: UpdateCategoryInput): Promise<CategoryEntity | null> {
@@ -13,7 +13,7 @@ export class CategoryService {
     }
 
     async getAll(
-        filters?: { userId?: number; type?: string },
+        filters?: { ownerId?: string; type?: string },
         options?: PaginationOptions
     ): Promise<PaginatedResult<CategoryEntity>> {
         return this.repository.findMany(filters, options);

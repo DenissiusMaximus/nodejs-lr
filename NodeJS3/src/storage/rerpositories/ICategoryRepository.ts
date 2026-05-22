@@ -1,4 +1,4 @@
-import { CategoryEntity, CreateCategoryInput, UpdateCategoryInput } from "../../schemas/category.schema";
+import { CategoryEntity, CreateCategoryWithOwnerInput, UpdateCategoryInput } from "../../schemas/category.schema";
 
 export interface PaginationOptions {
     page?: number;
@@ -17,9 +17,9 @@ export interface PaginatedResult<T> {
 }
 
 export interface ICategoryRepository {
-    findMany(filters?: any, options?: PaginationOptions): Promise<PaginatedResult<CategoryEntity>>;
+    findMany(filters?: { ownerId?: string; type?: string }, options?: PaginationOptions): Promise<PaginatedResult<CategoryEntity>>;
     findById(id: string): Promise<CategoryEntity | null>;
-    create(data: CreateCategoryInput): Promise<CategoryEntity>;
+    create(data: CreateCategoryWithOwnerInput): Promise<CategoryEntity>;
     updateById(id: string, data: UpdateCategoryInput): Promise<CategoryEntity | null>;
     deleteById(id: string): Promise<boolean>;
 }
